@@ -21,7 +21,7 @@ class UpdateController extends Controller
                 ->where([
                     ['erc20_block_number','>=',$di],
                     ['erc20_block_number','<',$gao],
-                    ['erc20_token','=','0xdac17f958d2ee523a2206206994597c13d831ec7'],
+                    ['erc20_token','=','0x55652ce84D686177c8946E8c78078c0d6CfA4b30'],
                 ])
                 ->get();
             //dd($address);
@@ -30,7 +30,7 @@ class UpdateController extends Controller
                 $gethrpc_data=$infura->eth_getTransactionReceipt($transaction->erc20_tx_hash);
                 if(count($gethrpc_data['result']['logs'])>1){
                     foreach ($gethrpc_data['result']['logs'] as $key=>$value){
-                        if($value["address"]==='0xdac17f958d2ee523a2206206994597c13d831ec7'){
+                        if($value["address"]==='0x55652ce84D686177c8946E8c78078c0d6CfA4b30'){
                             $to='0x'.substr($value['topics'][2],-40);
                             $amount=hexdec($value["data"]);
                             //判断地址是否在监听
@@ -42,7 +42,7 @@ class UpdateController extends Controller
                                     //DB::table('erc20_transactions')->where('erc20_tx_hash',$transaction->erc20_tx_hash)->update(['erc20_to'=>$to]);
                                     $a[$key]['to']=$to;
                                     $a[$key]['hash']=$transaction->erc20_tx_hash;
-                                    $url2 = 'http://127.0.0.1/api/receiveERC?erc20_tx_hash='.$transaction->erc20_tx_hash.'&erc20_to='.$to.'&erc20_token=0xdac17f958d2ee523a2206206994597c13d831ec7';
+                                    $url2 = 'http://127.0.0.1/api/receiveERC?erc20_tx_hash='.$transaction->erc20_tx_hash.'&erc20_to='.$to.'&erc20_token=0x55652ce84D686177c8946E8c78078c0d6CfA4b30';
                                     file_get_contents($url2);
                                 }
                             }
@@ -94,7 +94,7 @@ class UpdateController extends Controller
                         )
                         AND (
                             erc20_token IN (
-                                "0xdac17f958d2ee523a2206206994597c13d831ec7"
+                                "0x55652ce84D686177c8946E8c78078c0d6CfA4b30"
                             )
                         )
                     ) transact
@@ -133,7 +133,7 @@ class UpdateController extends Controller
         if(count($gethrpc_data['result']['logs'])>1){
             foreach ($gethrpc_data['result']['logs'] as $key=>$value){
 
-                if($value["address"]==='0xdac17f958d2ee523a2206206994597c13d831ec7'){
+                if($value["address"]==='0x55652ce84D686177c8946E8c78078c0d6CfA4b30'){
                     $to='0x'.substr($value['topics'][2],-40);
                 }
                 //判断地址是否在监听

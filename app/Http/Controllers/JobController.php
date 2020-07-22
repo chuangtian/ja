@@ -14,31 +14,16 @@ class JobController extends Controller
     //测试
     public function test(Request $request){
 
-//        $b='0x01d48561cfd4edb766ee1103303777ac65323971c8abd82970cd4d4a13fbe6b9';
-//        $a[]=$this->getApi($b);
+
+//        $gethrpc=new Eth(config('app.eth'));
+//		$bal=$gethrpc->eth_getBalance('0x4c04ab9adb2d06ef43b777949f886d3c977f10a7','latest');
+//        $to_bal=hexdec($bal['result']);
+//
+//
+//        $amoubt=bcdiv(bcsub('5600000000000000',$to_bal),'1000000000000000000',18);
+//        $a = $this->sendETH2('0x4c04ab9adb2d06ef43b777949f886d3c977f10a7','company','0xeeAA8D2d1DC695A9C696A9713487aaf58174a574');
+//        //$a = $this->sendERC2('0x4c04ab9adb2d06ef43b777949f886d3c977f10a7', 'company', '155000000000','0x55652ce84D686177c8946E8c78078c0d6CfA4b30');
 //        dd($a);
-
-        $date2= date("Y-m-d H:i:s", strtotime("-25 minute"));
-
-        //$info=DB::table('token_confirm')->where('update_time','>',$date2)->get();
-        $info=DB::select("select * from token_boss_get where hash in(select hash from token_boss_get WHERE `data`='ok' group by hash having count(*)=1) AND `data` ='ok' AND update_time >='2020-07-15 00:00:39';
-");
-        //dd($info);
-        foreach ($info as $value){
-            //$a=$value->hash;
-            $a[]=$this->getApi($value->hash);
-
-        }
-        dd($a);
-        $gethrpc=new Eth(config('app.eth'));
-		$bal=$gethrpc->eth_getBalance('0x4c04ab9adb2d06ef43b777949f886d3c977f10a7','latest');
-        $to_bal=hexdec($bal['result']);
-
-                   
-        $amoubt=bcdiv(bcsub('5600000000000000',$to_bal),'1000000000000000000',18);
-        $a = $this->sendETH2('0x4c04ab9adb2d06ef43b777949f886d3c977f10a7','company','0xeeAA8D2d1DC695A9C696A9713487aaf58174a574');
-        //$a = $this->sendERC2('0x4c04ab9adb2d06ef43b777949f886d3c977f10a7', 'company', '155000000000','0xdac17f958d2ee523a2206206994597c13d831ec7');
-        dd($a);
 
         $gethrpc=new Eth(config('app.eth'));//测试网络
 //        $infura=new Eth('https://mainnet.infura.io/v3/ca6382c272c94b5ab65937ce7213e94f');//infura网络
@@ -52,8 +37,8 @@ class JobController extends Controller
 //        dd($gasPrice2);
         //$gethrpc_data=$gethrpc->eth_getTransactionByHash('0x7ce86d5b3eb7290747bcfed5fb7a228e7dfa0fc15e2fcf31726272911423c3b5');
 
-        //$result=$gethrpc->personal_newAccount('R34nP&fWtw3w#aYv');
-        //dd($result);
+        $result=$gethrpc->personal_newAccount('4dMi91yzn1CSI4Vm');
+        dd($result);
         $result = $gethrpc->personal_unlockAccount('0xad0d38e39c43e484180d3709756474f499389a99','ErCPGsysPa$$');//解锁
         $result2 = $gethrpc->personal_unlockAccount('0x399ce1e61ab054a2fee1a6b566d1b4bd2c1994e3','ErCPGsysPa$$');//解锁
         //$blockNumberInfo=$this->blockNumber();
@@ -64,7 +49,7 @@ class JobController extends Controller
         dd($erc20_data);
         foreach ($erc20_data as $value){
             //dd($value->hash);
-            $keyinfo=DB::table('accounts')->where('address',$value->to)->where('platformName','pg')->first();
+            $keyinfo=DB::table('accounts')->where('address',$value->to)->where('platformName','ja')->first();
             //dd($erc20_data);
             if($keyinfo){
                 //try {
@@ -321,7 +306,7 @@ class JobController extends Controller
 
         foreach ($erc20_data as $value){
             //dd($value->hash);
-            $keyinfo=DB::table('accounts')->where('address',$value->to)->where('platformName','pg')->first();
+            $keyinfo=DB::table('accounts')->where('address',$value->to)->where('platformName','ja')->first();
             //dd($erc20_data);
             if($keyinfo){
                 try {
@@ -594,9 +579,9 @@ class JobController extends Controller
             }else{
 
                 $toAddress[]=$value->to;
-                $keyinfo=DB::table('accounts')->where('address',$value->to)->where('platformName','pg')->first();
+                $keyinfo=DB::table('accounts')->where('address',$value->to)->where('platformName','ja')->first();
                 if($keyinfo){
-                    $uri = config('app.eth_api_wai')."/api?module=account&action=tokenbalance&contractaddress=0xdac17f958d2ee523a2206206994597c13d831ec7&address=$value->to&tag=latest&apikey=3FVDDCH2IJRZYUDDSA69WA8EAUAGC8HZXQ";
+                    $uri = config('app.eth_api_wai')."/api?module=account&action=tokenbalance&contractaddress=0x55652ce84D686177c8946E8c78078c0d6CfA4b30&address=$value->to&tag=latest&apikey=3FVDDCH2IJRZYUDDSA69WA8EAUAGC8HZXQ";
                     $task_message = json_decode(file_get_contents($uri), true);
                     if($task_message['status']=='1'){
                         if($task_message['result']>0){
@@ -657,7 +642,7 @@ class JobController extends Controller
 			$keyinfo=DB::table('token_confirm')->where('hash',$value->hash)->first();
 			if($keyinfo->confirm>=12){
 				try {
-                $url = 'http://127.0.0.1/api/receiveERC?erc20_tx_hash='.$value->hash.'&erc20_to='.$value->to.'&erc20_token=0xdac17f958d2ee523a2206206994597c13d831ec7';
+                $url = 'http://127.0.0.1/api/receiveERC?erc20_tx_hash='.$value->hash.'&erc20_to='.$value->to.'&erc20_token=0x55652ce84D686177c8946E8c78078c0d6CfA4b30';
                 $urls[]= $url;
                 file_get_contents($url);
 //                $url = 'https://portal.prancegoldholdings.com/erc_api?hash='.$value->hash.'&to='.$value->to.'&api_key=Rd5m4Vy42zERBPTb';
@@ -681,7 +666,7 @@ class JobController extends Controller
         $data['password']='company';
         $data['to']='0x05105c27636daef0f274e90e69f5f917cf978e27';
         $data['amount']='751000000000';
-        $contract='0xdac17f958d2ee523a2206206994597c13d831ec7';
+        $contract='0x55652ce84D686177c8946E8c78078c0d6CfA4b30';
         //jsonrpc
         $gethrpc=new Eth(config('app.eth'));//测试网络
         //$gethrpc=new Eth('http://127.0.0.1:2406');//本机
