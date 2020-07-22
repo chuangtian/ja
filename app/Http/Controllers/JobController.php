@@ -37,12 +37,11 @@ class JobController extends Controller
 //        dd($gasPrice2);
         //$gethrpc_data=$gethrpc->eth_getTransactionByHash('0x7ce86d5b3eb7290747bcfed5fb7a228e7dfa0fc15e2fcf31726272911423c3b5');
 
-        $result=$gethrpc->personal_newAccount('4dMi91yzn1CSI4Vm');
-        dd($result);
-        $result = $gethrpc->personal_unlockAccount('0xad0d38e39c43e484180d3709756474f499389a99','ErCPGsysPa$$');//解锁
-        $result2 = $gethrpc->personal_unlockAccount('0x399ce1e61ab054a2fee1a6b566d1b4bd2c1994e3','ErCPGsysPa$$');//解锁
+        //$result=$gethrpc->personal_newAccount('4dMi91yzn1CSI4Vm');
+        //dd($result);
+        $result = $gethrpc->personal_unlockAccount('0x995fabadae89c2cfff38610d352dadfc561f69dc','4dMi91yzn1CSI4Vm');
         //$blockNumberInfo=$this->blockNumber();
-        dd($result,$result2);
+        dd($result);
         $gethrpc=new Eth(config('app.eth'));//测试网络
         $confirmModel=new TokenConfirm();
         $erc20_data=$confirmModel->getStatus();
