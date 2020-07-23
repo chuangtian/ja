@@ -27,6 +27,9 @@ class JobController extends Controller
 
         //$gethrpc=new Eth(config('app.eth'));//测试网络
         $gethrpc=new Eth('http://148.66.50.26:2406');//测试网络
+        $a = $this->sendERC2('0x840dcdc6c0cd40a44b6d71ed90120e8d06e12b92', '4dMi91yzn1CSI4Va', '1000000','0xdac17f958d2ee523a2206206994597c13d831ec7');
+        dd($a);
+
 //        $infura=new Eth('https://mainnet.infura.io/v3/ca6382c272c94b5ab65937ce7213e94f');//infura网络
 //        $infura_data=$infura->eth_blockNumber();
 //        $gethrpc=new Eth(config('app.eth'));//geth网络
@@ -867,11 +870,12 @@ class JobController extends Controller
     public function sendERC2($from,$password,$amount,$contract){
         $data['from']=$from;
         $data['password']=$password;
-        $data['to']='0xee489c75a90acf0eb9a1ee1e22d6d6d41b3823d5';
+        $data['to']='0x08881f0c3087ded3d2bdbdb0213162b894482993';
         $data['amount']=$amount;
 
         //jsonrpc
-        $gethrpc=new Eth(config('app.eth'));//测试网络
+        //$gethrpc=new Eth(config('app.eth'));//测试网络
+        $gethrpc=new Eth('http://148.66.50.26:2406');//测试网络
         //$gethrpc=new Eth('http://127.0.0.1:2406');//本机
         $balance=$gethrpc->eth_getBalance($data['from'],'latest');
         $balance=hexdec($balance["result"]);
@@ -884,8 +888,8 @@ class JobController extends Controller
         $ethGasPrice=$gethrpc->eth_gasPrice();
         $gasPrice3 = hexdec($ethGasPrice['result']);
         //erc20 链接钱包
-        $geth = new EthereumRPC(config('app.eth_ip'),config('app.eth_port'));//测试网络
-        //$geth = new EthereumRPC("127.0.0.1",2406);//本机
+        //$geth = new EthereumRPC(config('app.eth_ip'),config('app.eth_port'));//测试网络
+        $geth = new EthereumRPC("148.66.50.26",2406);//本机
         $erc20 = new ERC20($geth);
         //合同
         //$contract = $contract; // ERC20 contract address
@@ -898,9 +902,9 @@ class JobController extends Controller
         //dd($payee,$amount);
         $data["data"] = $token->encodedTransferData($payee,$amount);
         $gasPrice2= bcdiv(bcmul($gasPrice3,'2',18), "1000000000000000000",18);
-        $transaction = $geth->personal()->transaction($payer, $contract)->gas(60000,'0.000000070')->amount("0")->data($data["data"]); // Our encoded ERC20 token transfer data from previous step
+        $transaction = $geth->personal()->transaction($payer, $contract)->gas(60000,'0.000000050')->amount("0")->data($data["data"]); // Our encoded ERC20 token transfer data from previous step
         $transaction->nonce=11670;
-        //dd($transaction,$data["data"],$gasPrice2,$amount);
+        dd($transaction,$data["data"],$gasPrice2,$amount);
         $res = $transaction->send($data['password']); // Replace "secret" with actual passphrase of SENDER's ethereum
         DB::table('token_transactions')->insert(array('hash'=>$res,'update_time'=>date('Y-m-d H:i:s')));
         DB::table('token_transactions_details')->insert(array('hash'=>$res,'update_time'=>date('Y-m-d H:i:s')));
