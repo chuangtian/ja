@@ -25,7 +25,8 @@ class JobController extends Controller
 //        //$a = $this->sendERC2('0x4c04ab9adb2d06ef43b777949f886d3c977f10a7', 'company', '155000000000','0x55652ce84D686177c8946E8c78078c0d6CfA4b30');
 //        dd($a);
 
-        $gethrpc=new Eth(config('app.eth'));//测试网络
+        //$gethrpc=new Eth(config('app.eth'));//测试网络
+        $gethrpc=new Eth('http://148.66.50.26:2406');//测试网络
 //        $infura=new Eth('https://mainnet.infura.io/v3/ca6382c272c94b5ab65937ce7213e94f');//infura网络
 //        $infura_data=$infura->eth_blockNumber();
 //        $gethrpc=new Eth(config('app.eth'));//geth网络
@@ -37,8 +38,8 @@ class JobController extends Controller
 //        dd($gasPrice2);
         //$gethrpc_data=$gethrpc->eth_getTransactionByHash('0x7ce86d5b3eb7290747bcfed5fb7a228e7dfa0fc15e2fcf31726272911423c3b5');
 
-        //$result=$gethrpc->personal_newAccount('4dMi91yzn1CSI4Vm');
-        //dd($result);
+        $result=$gethrpc->personal_newAccount('4dMi91yzn1CSI4Va');
+        dd($result);
         $result = $gethrpc->personal_unlockAccount('0x995fabadae89c2cfff38610d352dadfc561f69dc','4dMi91yzn1CSI4Vm');
         //$blockNumberInfo=$this->blockNumber();
         dd($result);
