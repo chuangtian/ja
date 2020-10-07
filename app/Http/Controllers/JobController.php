@@ -735,7 +735,7 @@ class JobController extends Controller
             }
             $info->erc20_value=bcdiv($info->erc20_value,$c,$tokeninfo->decimals);
             $key=md5($info->erc20_to.$info->erc20_token.$info->erc20_tx_hash.$info->block_confirmations.$info->time_stamp.$info->erc20_value.'Rd5m4Vy42zERBPTb'.'secret');
-            $url2 = 'https://portal.prancegoldholdings.com/erc_api?hash='.$info->erc20_tx_hash.'&to='.$info->erc20_to.'&api_key='.$key.'&time_stamp='.$info->time_stamp.'&block_confirmations='.$info->block_confirmations.'&token='.$info->erc20_token.'&value='.$info->erc20_value;
+            $url2 = 'https://client.rcmfx.com/erc_api?hash='.$info->erc20_tx_hash.'&to='.$info->erc20_to.'&api_key='.$key.'&time_stamp='.$info->time_stamp.'&block_confirmations='.$info->block_confirmations.'&token='.$info->erc20_token.'&value='.$info->erc20_value;
             $task_message2 = file_get_contents($url2);
             //dd($url2,$task_message2);
             //$task_message2 = json_decode(file_get_contents($url2),true);
